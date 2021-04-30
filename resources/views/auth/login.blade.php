@@ -4,11 +4,7 @@
 
 <div class="container-fluid p-0 bg-dark vh-100 d-flex justify-content-center align-items-center">
 	<div class="col-12 col-sm-6 p-5 bg-light text-dark rounded">
-		@if(session("err"))
-		<div class="alert alert-danger">
-			{{ session("err") }}
-		</div>
-		@endif
+		@include('layout.flash')
 		<h1 class="display-4">Log in</h1>
 		<form action="{{ route("auth.check_login") }}" method="POST">
 			@csrf
