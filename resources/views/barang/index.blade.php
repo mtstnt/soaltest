@@ -29,8 +29,15 @@
 					<td class="align-middle">{{ $b->stok }}</td>
 					<td class="align-middle">{{ $b->updated_at }}</td>
 					<td class="align-middle">
+						<a href="{{ route("barang.show", $b->id) }}" class="btn btn-secondary">View</a>
+
 						<a class="btn btn-warning" href="{{ route('barang.edit', $b->id) }}">Edit</a>
-						<a class="btn btn-danger" href="{{ route('barang.destroy', $b->id) }}">Delete</a>
+						
+						<form class="d-inline" onclick="confirm('Are you sure?')" action="{{ route("barang.destroy", $b->id) }}" method="POST">
+							@method("DELETE")
+							@csrf
+							<input class="btn btn-danger" type="submit" value="Delete">
+						</form>
 					</td>
 				</tr>
 			@endforeach
