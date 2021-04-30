@@ -15,13 +15,10 @@ class CreatePembelianTable extends Migration
     {
         Schema::create('pembelian', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("id_detail_pembelian");
             $table->unsignedInteger("diskon_persen");
             $table->unsignedInteger("diskon_nominal");
             $table->unsignedInteger("total_harga");
             $table->timestamps();
-
-            $table->foreign("id_detail_pembelian")->references("id")->on("detail_pembelian");
         });
     }
 
