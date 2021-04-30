@@ -3,7 +3,7 @@
 @section('page.content')
 <section class="col-sm-6 col-12 mx-auto my-2">
 	@include('layout.flash')
-	<h1 class="text-center">Add Barang</h1>
+	<h1 class="text-center">Tambah Barang</h1>
 	<form action="{{ route("barang.store") }}" method="POST">
 		@csrf
 		<div class="mb-3">

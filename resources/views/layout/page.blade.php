@@ -19,10 +19,14 @@
 						<a class="nav-link {{ $page === "barang" ? "active" : "" }}" aria-current="page" href="/barang">Barang</a>
 					</li>
 					<li class="nav-item">
-						<a class="nav-link {{ $page === "transaksi" ? "active" : "" }}" aria-current="page" href="/transaksi">Transaksi</a>
+						<a class="nav-link {{ $page === "pembelian" ? "active" : "" }}" aria-current="page" href="/pembelian">Pembelian</a>
 					</li>
 				</ul>
-				<a class="btn btn-danger" href="/logout">Log out</a>
+
+				<form action="{{ route("auth.logout") }}" method="POST">
+					@csrf
+					<button class="btn btn-danger">Log out</button>
+				</form>
 				
 			</div>
 		</div>

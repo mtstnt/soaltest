@@ -5,7 +5,7 @@
 	@include('layout.flash')
 	<h1 class="text-center">Master Barang</h1>
 	<div class="my-2">
-		<a class="btn btn-primary" href="{{ route('barang.create') }}">Add Barang</a>
+		<a class="btn btn-primary" href="{{ route('barang.create') }}">Tambah Barang</a>
 	</div>
 	<table class="table">
 		<thead>
