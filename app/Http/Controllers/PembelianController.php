@@ -20,6 +20,7 @@ class PembelianController extends Controller
             "title" => "Admin: Pembelian",
             "page" => "pembelian",
             "list_pembelian" => $list_pembelian,
+            "co" => 1,
         ]);
     }
 
@@ -28,27 +29,43 @@ class PembelianController extends Controller
         return view("pembelian.create", [
             "title" => "Admin: Tambah Pembelian",
             "page" => "pembelian",
+            "list_barang" => Barang::all()
         ]);
+    }
+
+    public function show($id)
+    {
+        try {
+            $pembelian = Pembelian::findOrFail($id);
+
+            return view("pembelian.view", [
+                "title" => "Admin: Pembelian",
+                "page" => "pembelian",
+                "pembelian" => $pembelian,
+                "co" => 1,
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route("pembelian.index")->with("err", "Tidak ditemukan!");
+        } catch (Exception $e) {
+            return redirect()->route("pembelian.index")->with("err", "Error: " . $e->getMessage());
+        }
     }
 
     public function store(Request $request)
     {
         $new_data = $request->validate([
-            "id_barang" => "required|max:50|exists:barang,id",
-            "jumlah" => "required|numeric",
+            "count" => "required|numeric|min:1",
+            "id_barang" => "required|array|min:1|exists:master_barang,id",
+            "jumlah" => "required|array|min:1",
         ]);
-
+            
         try {
-            $barang = Barang::findOrFail($new_data["id_barang"]);
-
-            $pembelian = (new PembelianService)->calculatePembelian($new_data['jumlah'], $barang);
-            DB::transaction(function () use ($pembelian, $barang) {
-                $pembelian->save();
-                $barang->stok = $barang->stok - $pembelian->jumlah;
-                $barang->update();
-            });
-
+            $pembelian = (new PembelianService)->createPembelian(
+                $new_data["id_barang"],
+                $new_data["jumlah"],
+            );
             return redirect()->route("pembelian.index")->with("success", "Pembelian berhasil ditambahkan");
+
         } catch (ModelNotFoundException $e) {
             return redirect()->route("pembelian.create")->with("err", "Tidak ditemukan");
         } catch (Exception $e) {
