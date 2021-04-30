@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BarangController;
+use App\Models\Barang;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,3 +27,5 @@ Route::prefix("auth")->middleware('not-auth')->group(function() {
     Route::get("login", [AuthController::class, "login"])->name("auth.login");
     Route::post("login", [AuthController::class, "checkLogin"])->name("auth.check_login");
 });
+
+Route::resource("barang", BarangController::class)->middleware('auth');
