@@ -22,6 +22,6 @@ class NotAuthenticated
     {
         if (! Auth::check())
             return $next($request);
-        return redirect("/");
+        return redirect("admin.home");
     }
 }
