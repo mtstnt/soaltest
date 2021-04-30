@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 
 class BarangController extends Controller
@@ -19,6 +21,8 @@ class BarangController extends Controller
         return view("barang.index", [
             'title' => "Admin: Master Barang",
             'list_barang' => $allBarang,
+            'co' => 1,
+            'page' => 'barang',
         ]);
     }
 
@@ -30,7 +34,8 @@ class BarangController extends Controller
     public function create()
     {
         return view("barang.create", [
-            "title" => "Admin: Menambahkan Barang"
+            "title" => "Admin: Menambahkan Barang",
+            "page" => "barang"
         ]);
     }
 
@@ -49,9 +54,11 @@ class BarangController extends Controller
             'stok' => 'required|numeric',
         ]);
 
-        if (! $barang = Barang::create($requestData)) {
-            return redirect()->to('barang.index');
+        if (!Barang::create($requestData)) {
+            return redirect()->route('barang.create')->with("err", "Penambahan gagal!");
         }
+
+        return redirect()->route('barang.index')->with("success", "Penambahan barang berhasil!");
     }
 
     /**
@@ -62,7 +69,19 @@ class BarangController extends Controller
      */
     public function show($id)
     {
-        //
+        try {
+            $barang = Barang::findOrFail($id);
+
+            return view("barang.view", [
+                "title" => "Admin: " . $barang->id,
+                "barang" => $barang,
+                "page" => "barang",
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route("barang.index")->with("err", "Model with ID " . $id . " not found!");
+        } catch (Exception $e) {
+            return redirect()->route("barang.index")->with("err", "Error: " . $e->getMessage());
+        }
     }
 
     /**
@@ -73,7 +92,19 @@ class BarangController extends Controller
      */
     public function edit($id)
     {
-        //
+        try {
+            $barang = Barang::findOrFail($id);
+
+            return view("barang.edit", [
+                "title" => "Admin: Edit Barang",
+                "barang" => $barang,
+                "page" => "barang",
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route("barang.index")->with("err", "Model with ID " . $id . " not found!");
+        } catch (Exception $e) {
+            return redirect()->route("barang.index")->with("err", "Error: " . $e->getMessage());
+        }
     }
 
     /**
@@ -85,7 +116,33 @@ class BarangController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        try {
+            $barang = Barang::findOrFail($id);
+
+            $new_data = $request->validate([
+                'id' => 'exclude_if:id,' . $barang->id . '|required|max:50',
+                'nama' => 'required|max:150',
+                'harga' => 'required|numeric',
+                'stok' => 'required|numeric',
+            ]);
+
+            if (array_key_exists("id", $new_data))
+                $barang->id = $new_data["id"];
+
+            $barang->nama = $new_data["nama"];
+            $barang->harga = $new_data["harga"];
+            $barang->stok = $new_data["stok"];
+
+            if (!$barang->update()) {
+                throw new Exception("Gagal mengupdate data barang!");
+            }
+
+            return redirect()->route("barang.index")->with("success", "Barang berhasil terupdate!");
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route("barang.index")->with("err", "Model with ID " . $id . " not found!");
+        } catch (Exception $e) {
+            return redirect()->route("barang.index")->with("err", "Error: " . $e->getMessage());
+        }
     }
 
     /**
@@ -96,6 +153,19 @@ class BarangController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            $barang = Barang::findOrFail($id);
+            
+            if (! $barang->delete()) {
+                throw new Exception("Gagal menghapus data barang!");
+            }
+
+            return redirect()->route("barang.index")->with("success", "Barang berhasil terhapus!");
+
+        } catch (ModelNotFoundException $e) {
+            return redirect()->route("barang.index")->with("err", "Model with ID " . $id . " not found!");
+        } catch (Exception $e) {
+            return redirect()->route("barang.index")->with("err", "Error: " . $e->getMessage());
+        }
     }
 }

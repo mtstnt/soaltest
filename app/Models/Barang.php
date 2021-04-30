@@ -10,4 +10,8 @@ class Barang extends Model
     protected $table = "master_barang";
 
     protected $guarded = [];
+
+    protected $casts = [
+        'id' => 'string'
+    ];
 }
