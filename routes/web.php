@@ -18,7 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::prefix("auth")->group(function() {
+Route::prefix("auth")->middleware('not-auth')->group(function() {
     Route::get("/", function() {
         return redirect()->route('auth.login');
     });
