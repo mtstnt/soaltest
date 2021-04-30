@@ -22,9 +22,9 @@ class AuthController extends Controller
         ]);
 
         if (!Auth::attempt($requestData)) {
-            return \redirect()->route('auth.login')->with("err", "Incorrect username/password!");
+            return \redirect()->route('auth.login')->with("err", "Username/password salah!");
         }
 
-        return \redirect()->route('admin.barang');
+        return \redirect()->route('barang.index');
     }
 }
