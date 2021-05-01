@@ -11,6 +11,7 @@
 6. Kemudian, ketikkan `php artisan db:seed` untuk seeding database dengan data awal yang disediakan.
 7. Setelah selesai, bisa menjalankan projectnya dengan menjalankan `php artisan serve`. Nanti akan diserve di http://localhost:8000.
   Note: Pastikan APP_URL disesuaikan dengan url yang didapat setelah di run.
+8. Untuk login dengan akun bawaan dari Seeder, bisa menggunakan username `Admin` dan password `12345`
 
 ## Cara menjalankan query MySQL di SOAL_SQL.sql:
 1. Clone repository/download file SOAL_SQL.sql.

@@ -29,8 +29,8 @@ Route::prefix("auth")->middleware('not-auth')->group(function() {
     
     Route::get("login", [AuthController::class, "login"])->name("auth.login");
     Route::post("login", [AuthController::class, "checkLogin"])->name("auth.check_login");
-    Route::post("logout", [AuthController::class, "logout"])->name("auth.logout");
 });
+Route::post("auth/logout", [AuthController::class, "logout"])->name("auth.logout")->middleware("auth");
 
 Route::resource("barang", BarangController::class)->middleware('auth');
 
